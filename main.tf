@@ -8,10 +8,13 @@ locals {
 
   dist_files = {
     for relative_path in local.application_files : relative_path => {
-      content_type = lookup({
+      content_type = basename(lower(relative_path)) == "manifest.json" ? "application/manifest+json" : lookup({
         ".css"  = "text/css"
         ".html" = "text/html"
+        ".jpeg" = "image/jpeg"
         ".js"   = "text/javascript"
+        ".jpg"  = "image/jpeg"
+        ".json" = "application/json"
         ".png"  = "image/png"
         ".svg"  = "image/svg+xml"
       }, try(regex("\\.[^.]+$", lower(relative_path)), ""), "binary/octet-stream")
