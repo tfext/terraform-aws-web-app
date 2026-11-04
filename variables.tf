@@ -46,3 +46,16 @@ variable "bucket_name" {
     error_message = "Bucket name must not be empty."
   }
 }
+
+variable "manage_dns" {
+  type        = bool
+  default     = true
+  nullable    = false
+  description = "Look up the Route53 zone and create the application's alias record (default). Set to false when DNS is hosted elsewhere"
+}
+
+variable "certificate_arn" {
+  type        = string
+  default     = null
+  description = "ARN of a us-east-1 ACM certificate for the distribution. Default looks up the issued wildcard certificate for the domain's parent"
+}

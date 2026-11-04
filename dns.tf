@@ -1,10 +1,14 @@
 data "aws_route53_zone" "root" {
+  count = var.manage_dns ? 1 : 0
+
   name         = local.root_domain
   private_zone = false
 }
 
 resource "aws_route53_record" "app" {
-  zone_id = data.aws_route53_zone.root.zone_id
+  count = var.manage_dns ? 1 : 0
+
+  zone_id = data.aws_route53_zone.root[0].zone_id
   name    = var.domain
   type    = "A"
 
