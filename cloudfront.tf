@@ -1,4 +1,5 @@
 data "aws_acm_certificate" "app" {
+  count    = var.certificate_arn == null ? 1 : 0
   provider = aws.east
 
   domain   = "*.${local.root_domain}"
@@ -68,8 +69,8 @@ resource "aws_cloudfront_distribution" "app" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = data.aws_acm_certificate.app.arn
-    minimum_protocol_version = "TLSv1"
+    acm_certificate_arn      = var.certificate_arn != null ? var.certificate_arn : data.aws_acm_certificate.app[0].arn
+    minimum_protocol_version = "TLSv1.2_2021"
     ssl_support_method       = "sni-only"
   }
 }
